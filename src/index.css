@@ -1,0 +1,157 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root{
+  --radius: 16px;
+
+  /* dynamic accent (updated by useAccentFromArtwork), with safe fallbacks */
+  --accent: rgb(74 129 255);
+  --accent-10: color-mix(in srgb, var(--accent) 10%, transparent);
+  --accent-20: color-mix(in srgb, var(--accent) 20%, transparent);
+  --accent-35: color-mix(in srgb, var(--accent) 35%, transparent);
+
+  /* elevations */
+  --elev-1: 0 8px 30px rgba(0,0,0,.28);
+  --elev-2: 0 12px 40px rgba(0,0,0,.35);
+}
+
+/* Scrollbar (Firefox + WebKit) */
+*{ scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.25) transparent; }
+*::-webkit-scrollbar{ width:10px; height:10px; }
+*::-webkit-scrollbar-track{ background: transparent; }
+*::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.22);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover{ background: rgba(255,255,255,.32); }
+
+/* ===== Midnight blue background with electric-blue blooms (accent-aware) ===== */
+.app-bg{
+  background-color:#070b12;
+  background-image:
+    radial-gradient(1200px 800px at 30% 8%, var(--accent-35, rgba(74,129,255,.34)), transparent 60%),
+    radial-gradient(900px 700px at 78% 24%, var(--accent-20, rgba(26,198,255,.16)), transparent 60%),
+    radial-gradient(1100px 900px at 5% 90%, rgba(180,46,104,.14), transparent 65%),
+    linear-gradient(180deg, #0b1220 0%, #090f1a 55%, #070b12 100%);
+}
+
+/* subtle vignette to pull focus */
+.app-bg::after{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background: radial-gradient(1200px 900px at 50% 40%, rgba(0,0,0,0), rgba(0,0,0,.18) 60%, rgba(0,0,0,.30) 100%);
+}
+
+/* Panels (apply classes on <aside>): sidebar-bg / rail-bg */
+.sidebar-bg{
+  background-image:
+    radial-gradient(580px 420px at 30% 0%, rgba(74,129,255,.18), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  backdrop-filter:saturate(120%) blur(6px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+.rail-bg{
+  background-image:
+    radial-gradient(520px 380px at 70% 0%, rgba(74,129,255,.10), transparent 60%),
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+  backdrop-filter:saturate(120%) blur(6px);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Cards: soft sheen + lift */
+.card{
+  @apply bg-white/5 backdrop-blur-sm rounded-2xl;
+  background-image:
+    radial-gradient(120% 100% at 0% 0%, rgba(255,255,255,0.05), transparent 60%),
+    radial-gradient(120% 100% at 100% 100%, rgba(255,255,255,0.04), transparent 60%);
+  box-shadow: var(--elev-2), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+/* Badges & chips */
+.badge{ @apply text-xs px-2 py-0.5 rounded-full bg-white/10; }
+
+.chip{
+  @apply px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-sm whitespace-nowrap transition-colors;
+  box-shadow: 0 6px 20px rgba(0,0,0,.25), inset 0 1px 0 rgba(255,255,255,.05);
+}
+.chip--active{
+  background: color-mix(in srgb, var(--accent) 22%, rgba(255,255,255,.08));
+  box-shadow: 0 8px 24px var(--accent-20);
+}
+
+/* Section titles */
+.title{ @apply text-xl md:text-2xl font-semibold; }
+.subtitle{ @apply text-sm text-white/70; }
+
+/* Hairline section header (use on right rail or lists) */
+.section-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding-bottom: 8px; margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+/* Accent utilities */
+.button-accent{ background: var(--accent-20, rgba(255,255,255,.14)); }
+.button-accent:hover{ background: var(--accent-35, rgba(255,255,255,.22)); }
+.progress-accent{ background: color-mix(in srgb, var(--accent) 70%, white 30%); }
+
+/* Premium focus ring */
+:where(button,a,[role="button"],input,textarea,select):focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, white 10%);
+  border-radius: 14px;
+}
+
+/* Range slider (volume etc.) */
+input[type="range"]{
+  -webkit-appearance:none; appearance:none;
+  width:100%; background: transparent;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+  height:6px; border-radius:999px; background: rgba(255,255,255,.12);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  margin-top:-6px; /* center thumb on 6px track */
+  width:18px; height:18px; border-radius:50%;
+  background: var(--accent, #8ab4ff);
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+input[type="range"]::-moz-range-track{
+  height:6px; border-radius:999px; background: rgba(255,255,255,.12);
+}
+input[type="range"]::-moz-range-progress{
+  height:6px; border-radius:999px; background: var(--accent, #8ab4ff);
+}
+input[type="range"]::-moz-range-thumb{
+  width:18px; height:18px; border-radius:50%;
+  background: var(--accent, #8ab4ff);
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,.35);
+}
+
+/* Loading shimmer (utility) */
+@keyframes shimmer{ 100% { transform: translateX(100%); } }
+.shimmer{
+  position:relative; overflow:hidden;
+}
+.shimmer::after{
+  content:""; position:absolute; inset:0; transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.10), transparent);
+  animation: shimmer 1.6s infinite;
+}
+
+/* Reduced motion respect */
+@media (prefers-reduced-motion: reduce){
+  *{
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
